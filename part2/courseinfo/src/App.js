@@ -44,7 +44,7 @@ const App = () => {
       ]
     }
   ]
-
+/* already used Course component as a separate module*/
   return courses.map(course => <Course key={course.id} course={course} />) 
   
 }
