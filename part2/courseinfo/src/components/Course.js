@@ -8,6 +8,7 @@ const Course=({course})=> {
     <>
        <Header title={course.name} />
         {course.parts.map(part => <Part key={part.id} part={part.name} exercise={part.exercises} />)}
+        {/* reduce was already implemented*/}
         <Total total={course.parts.reduce((acc, curr) => acc + curr.exercises, 0)} />
     </>
   )
