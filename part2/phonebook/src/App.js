@@ -4,8 +4,16 @@ import Person from "./components/Person";
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
+
+  const name_array = persons.map((person) => person.name);
   const handleNewName = (event) => {
     setNewName(event.target.value);
+    if (name_array.includes(event.target.value)) {
+      alert(`${event.target.value} is already added to phonebook`);
+      setNewName("");
+    } else {
+      setNewName(event.target.value);
+    }
   };
   const addName = (event) => {
     event.preventDefault();
