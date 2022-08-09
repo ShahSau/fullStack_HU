@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Country from './components/Country'
 import Search from './components/Search'
-
+import Results from './components/Results'
 const App = () => {
   
   useEffect( ()=>{
@@ -13,7 +13,13 @@ const App = () => {
     })
   },[])
   const [listCountry, setListCountry] = useState([])
+  const [showResults, setShowResults] = useState([])
   const[search, setSearchs] = useState('')
+  const onClickC =(event)=>{
+    let country = filter_country.filter( c => c.name===event.name)[0]
+    setShowResults([country])
+    
+  }
   const updateSearch = (event)=>{
     setSearchs(event.target.value)
   }
@@ -31,7 +37,11 @@ const App = () => {
       <div>
         <Search search={search} updateSearch={updateSearch} />
       {filter_country.map(country =>
-      <p key={Math.random()}>{country.name.common}</p>
+      <p key={Math.random()}>{country.name.common}<button onClick={()=>onClickC(country)}>Button </button></p>
+        )}
+         {showResults.map(c=>
+        <Results key={Math.random()} country={c}/>
+        
         )}
       </div>
     )
