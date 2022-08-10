@@ -6,7 +6,7 @@ import personService from './services/Persons'
 
 const App = () => {
   const [newName, setNewName] = useState("");
-  const [newNumber, setnewNumber] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [change, setChange] = useState("");
   const [persons, setPersons] = useState([]);
   useEffect(() => {
@@ -20,17 +20,17 @@ const App = () => {
   const name_array = persons.map((person) => person.name);
 
   const handleNewName = (event) => {
-    if (name_array.includes(event.target.value)) {
-      alert(`${event.target.value} is already added to phonebook`);
-      setNewName("");
-      setnewNumber("")
-    } else {
+    //if (name_array.includes(event.target.value)) {
+    //   alert(`${event.target.value} is already added to phonebook`);
+    //   setNewName("");
+    //   setnewNumber("")
+    // } else {
       setNewName(event.target.value);
-    }
+    //}
   };
 
   const handleNewNumber = (event) => {
-    setnewNumber(event.target.value);
+    setNewNumber(event.target.value);
   };
 
   const addName = (event) => {
@@ -39,13 +39,34 @@ const App = () => {
       name: newName,
       number:newNumber,
     };
-    personService
+    if (name_array.includes(newName)){
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
+        const already_name =persons.find(name=>name.name === newName)
+        const new_Obj = {...already_name, number : newNumber}
+        console.log(already_name.id)
+        personService
+        .update(already_name.id, new_Obj)
+        .then(new_data=>{
+          setPersons(persons.map(person=> person.id!==already_name.id ? person : new_data))
+        })
+        setNewName('')
+        setNewNumber('')
+      }else{
+        setNewName('')
+        setNewNumber('')
+      }
+
+    }
+    else{
+      personService
     .create(newObj)
     .then(newPerson=>
       setPersons(persons.concat(newPerson))
       )
+    }
+    
     setNewName("");
-    setnewNumber("")
+    setNewNumber("")
   };
 
   //creating a function for delete person
