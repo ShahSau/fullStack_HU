@@ -4,6 +4,7 @@ import { Form } from "./components/Form";
 import Person from "./components/Person";
 import personService from "./services/Persons";
 import Success from "./components/Success"
+import ErrorMessage from "./components/ErrorMessage"
 
 const App = () => {
   const [newName, setNewName] = useState("");
@@ -12,6 +13,8 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   //Creating success hook
   const[ successMessage, setSuccessMessage] = useState(null)
+  //creating error hook
+ const[ errorMessage, setErrorMessage] = useState(null)
   useEffect(() => {
     personService 
     .getAll()
@@ -23,13 +26,7 @@ const App = () => {
   const name_array = persons.map((person) => person.name);
 
   const handleNewName = (event) => {
-    //if (name_array.includes(event.target.value)) {
-    //   alert(`${event.target.value} is already added to phonebook`);
-    //   setNewName("");
-    //   setnewNumber("")
-    // } else {
       setNewName(event.target.value);
-    //}
   };
 
   const handleNewNumber = (event) => {
@@ -56,6 +53,16 @@ const App = () => {
           setTimeout(()=>{
             setSuccessMessage(null)
           },5000)
+          .catch(error=>{
+            console.log(error)
+            setErrorMessage(`Information of ${newName} has already been removed from server`)
+              setTimeout(()=>{
+                setErrorMessage(null)
+                setNewName(newName)
+                setNewNumber("-")
+              },5000)
+              setPersons(persons.filter(person=> person.id!== already_name.id ))
+          })
         setNewName('')
         setNewNumber('')
       }else{
@@ -102,6 +109,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Success message={successMessage}/>
+      <ErrorMessage message={errorMessage}/> 
       <Filter handleChange={handleChange}  />
       <h2>add a new</h2>
 
