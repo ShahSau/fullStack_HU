@@ -2,13 +2,16 @@ import React, { useState,useEffect } from "react";
 import Filter from "./components/Filter";
 import { Form } from "./components/Form";
 import Person from "./components/Person";
-import personService from './services/Persons'
+import personService from "./services/Persons";
+import Success from "./components/Success"
 
 const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [change, setChange] = useState("");
   const [persons, setPersons] = useState([]);
+  //Creating success hook
+  const[ successMessage, setSuccessMessage] = useState(null)
   useEffect(() => {
     personService 
     .getAll()
@@ -49,6 +52,10 @@ const App = () => {
         .then(new_data=>{
           setPersons(persons.map(person=> person.id!==already_name.id ? person : new_data))
         })
+        setSuccessMessage(`Added ${newName}`)
+          setTimeout(()=>{
+            setSuccessMessage(null)
+          },5000)
         setNewName('')
         setNewNumber('')
       }else{
@@ -64,7 +71,10 @@ const App = () => {
       setPersons(persons.concat(newPerson))
       )
     }
-    
+    setSuccessMessage(`Added ${newName}`)
+          setTimeout(()=>{
+            setSuccessMessage(null)
+          },5000)
     setNewName("");
     setNewNumber("")
   };
@@ -91,6 +101,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Success message={successMessage}/>
       <Filter handleChange={handleChange}  />
       <h2>add a new</h2>
 
