@@ -3,6 +3,7 @@ import React, { useState,useEffect } from "react";
 import Filter from "./components/Filter";
 import { Form } from "./components/Form";
 import Person from "./components/Person";
+import personService from './services/Persons'
 
 const App = () => {
   const [newName, setNewName] = useState("");
@@ -39,11 +40,10 @@ const App = () => {
       name: newName,
       number:newNumber,
     };
-    //setPersons(persons.concat(newObj));
-    axios
-    .post('http://localhost:3001/persons', newObj)
-    .then(response=>
-      setPersons(persons.concat(response.data))
+    personService
+    .create(newObj)
+    .then(newPerson=>
+      setPersons(persons.concat(newPerson))
       )
     setNewName("");
     setnewNumber("")
