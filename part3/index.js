@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-
+app.use(express.json());
 let persons = [
     { 
         "id": 1,
@@ -23,10 +23,11 @@ let persons = [
         "number": "39-23-6423122"
       }
 ]
-
+//fetching all persons
 app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
+//fetching one person
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
@@ -36,12 +37,24 @@ app.get('/api/persons/:id', (request, response) => {
     response.status(404).end('Person not found')
     } 
 })
+//adding new person
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    const person = {
+        id: Math.floor(Math.random() * 1234567812312349),
+        name: body.name,
+        number: body.number
+    }
+    persons = persons.concat(person)
+    response.json(person)
+} )
+//removing person
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 } )
-
+//info
 app.get('/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p> <p>${new Date()}</p>`)
   })
