@@ -1,8 +1,17 @@
+//first test
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => {
   return 1
 }
 
+//total like test
+const totalLikes = (blogs) => {
+  const reducer = (sum, item) => {
+    return sum + item.likes
+  }
+  return blogs.reduce(reducer, 0)
+}
 module.exports = {
-  dummy
+  dummy,
+  totalLikes
 }
